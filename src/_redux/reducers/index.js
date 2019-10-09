@@ -6,7 +6,7 @@ import AppNavigator from '../../_navigators';
 import todo from './todo'
 import contact from './contact'
 import channel from './channel'
-import message from './message'
+import order from './order'
 import meja from './meja'
 
 const navReducer = createNavigationReducer(AppNavigator);
@@ -15,7 +15,7 @@ const reducers = combineReducers({
     todo,
     contact,
     channel,
-    message,
+    order,
     meja,
 });
 
