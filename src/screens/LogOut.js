@@ -9,12 +9,14 @@ export default class Login extends Component {
         header: null,
     }
 
+    state = {
+      proses: false
+    }
+
     async componentDidMount(){
-        const token = await AsyncStorage.getItem('token')
-        if(token){
-          await AsyncStorage.removeItem('token')
-        }
-        this.props.navigation.navigate('Login')
+        await AsyncStorage.removeItem('token')
+        this.setState({ proses: false })
+        this.props.navigation.push('HomeScreen')
     }
 
     render(){

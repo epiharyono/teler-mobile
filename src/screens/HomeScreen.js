@@ -16,12 +16,24 @@ export default class HomeScreen extends Component {
         headerLeft: null
     }
 
+    state = {
+      'isLogin' : true
+    }
+
 
     async componentDidMount(){
         const token = await AsyncStorage.getItem('token')
         if(!token){
-          this.props.navigation.navigate('Login')
+          this.setState({ isLogin: false })
+        }else{
+          this.setState({ isLogin: true })
         }
+
+
+    }
+
+    componentWillUnmount(){
+        // alert('Home sc')
     }
 
     render(){
@@ -32,7 +44,7 @@ export default class HomeScreen extends Component {
                 <Card>
                     <CardItem>
                       <Icon active name="cart" />
-                      <Text onPress={()=> this.props.navigation.navigate('Transaksi')}>Transaksi</Text>
+                      <Text onPress={()=> this.props.navigation.navigate('Transaksi')}>Transaksi </Text>
                       <Right>
                         <Icon name="arrow-forward" />
                       </Right>
@@ -48,18 +60,24 @@ export default class HomeScreen extends Component {
 
                       <CardItem>
                         <Icon active name="print" />
-                        <Text onPress={()=> this.props.navigation.navigate('Icon')}>Printer</Text>
+                        <Text onPress={()=> this.props.navigation.navigate('Printer')}>Printer </Text>
                         <Right>
                           <Icon name="arrow-forward" />
                         </Right>
                        </CardItem>
 
                        <CardItem>
-                         <Icon active name="unlock" />
-                         <Text onPress={()=> this.props.navigation.navigate('Logout')}>Logout</Text>
-                         <Right>
-                           <Icon name="arrow-forward" />
-                         </Right>
+                           <Icon active name="unlock" />
+                           {this.state.isLogin? (
+                               <Text onPress={()=> this.props.navigation.push('Logout')}>Logout</Text>
+                           )
+                           : (
+                               <Text onPress={()=> this.props.navigation.push('Login')}>Login</Text>
+                           )}
+                           <Right>
+                             <Text>{this.state.isLogin}</Text>
+                             <Icon name="arrow-forward" />
+                           </Right>
                         </CardItem>
                  </Card>
               </Content>

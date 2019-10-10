@@ -4,7 +4,7 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
 
-import {HomeScreen, Transaksi, Login, Icon, Footer, Logout, TransaksiDetail} from '../screens'
+import {HomeScreen, Transaksi, Login, Printer, Footer, Logout, TransaksiDetail, TransaksiBayar} from '../screens'
 
 
 const AppNavigator = createStackNavigator({
@@ -17,18 +17,17 @@ const AppNavigator = createStackNavigator({
     TransaksiDetail: {
       screen: TransaksiDetail,
     },
+    TransaksiBayar: { screen: TransaksiBayar },
   	Login: {
   		screen: Login
   	},
   	Logout: {
   		screen: Logout
   	},
-  	Icon: {
-  		screen: Icon
-  	},
+  	Printer: { screen: Printer },
     Footer: { screen: Footer }
 }, {
-  initialRouteName: 'Login',
+  initialRouteName: 'HomeScreen',
 });
 
 export default AppNavigator;

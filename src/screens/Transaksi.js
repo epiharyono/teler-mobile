@@ -20,7 +20,19 @@ export  class Transaksi extends Component{
 
     async componentDidMount(){
         const token = await AsyncStorage.getItem('token')
-        this.props.allMeja(token)
+        if(!token){
+            alert('Silahkan Login')
+            this.props.navigation.navigate('HomeScreen')
+        }else{
+            this.props.allMeja(token)
+            if(this.props.meja.isError){
+              alert('Silahkan Login')
+              await AsyncStorage.removeItem('token')
+              this.props.navigation.navigate('HomeScreen')
+            }
+        }
+        // alert(JSON.stringify(this.props.meja.isError))
+
     }
 
 
@@ -32,11 +44,12 @@ export  class Transaksi extends Component{
                         <Spinner/>
                     )
                     : (
+
                         <List>
                             {this.props.meja.results.map(c=>(
                                 <ListItem avatar
                                   key={c.id}
-                                  onPress={()=> this.props.navigation.navigate('TransaksiDetail', {url: c.url, head: c.uraian } )}   
+                                  onPress={()=> this.props.navigation.navigate('TransaksiDetail', {url: c.url, head: c.uraian } )}
                                 >
                                     <Left>
                                         <Thumbnail source={{ uri: `http://teler.id/${c.pic}` }} />

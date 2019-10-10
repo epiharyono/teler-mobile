@@ -10,9 +10,15 @@ export default function reducer(state=initialState, action){
             return {...state, isLoading: true}
         case 'ALL_MEJAS_FULFILLED':
             console.log(action.payload.data.data)
-            return {...state, isLoading: false, results: action.payload.data.data}
+            return {
+              ...state, isLoading: false,
+              results: action.payload.data.data,
+              isError: false
+            }
         case 'ALL_MEJAS_REJECTED':
-            return {...state, isLoading: true, isError: true}
+            return {
+              ...state, isLoading: true, isError: true
+            }
         default:
             return state
     }

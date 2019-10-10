@@ -1,7 +1,9 @@
 import React, {Component} from 'react'
-import {View, Container, Content, Form, Label, Item, Input, Button, Text} from 'native-base'
-import {AsyncStorage} from 'react-native'
+import {View, Container, Content, Form, Label, Item, Input, Button, Text, Spinner, Icon} from 'native-base'
+import {AsyncStorage, TextInput, StyleSheet, TouchableOpacity} from 'react-native'
 import axios from 'axios'
+
+import {apiUrl} from '../utils/config'
 
 export default class Login extends Component {
 
@@ -11,23 +13,43 @@ export default class Login extends Component {
 
     state = {
         email: "epiharyono@gmail.com",
-        password: "1234"
+        password: "1234",
+        proses: false,
+        isPasswordHidden: true,
+        toggleText: 'show'
     }
 
     async componentDidMount(){
         const token = await AsyncStorage.getItem('token')
         if(token){
-          this.props.navigation.navigate('HomeScreen')
+          this.props.navigation.push('HomeScreen')
         }
+        this.setState({ proses: false })
+    }
+
+    async componentWillReceiveProps(){
+        // const token = await AsyncStorage.getItem('token')
+        // if(token){
+        //   this.props.navigation.navigate('HomeScreen')
+        // }
+        alert('will')
+        this.setState({ proses: false })
     }
 
     async handleLogin(){
+        this.setState({ proses: true })
+        // var token  = 'eyJ0eXAid'
+        // await AsyncStorage.setItem('token', token)
+        // this.props.navigation.navigate('HomeScreen')
+
         const {email, password} = this.state
-        const res = await axios.post('http://teler.id/api/v1/auth/login', {
+        const res = await axios.post(`${apiUrl}/auth/login`,{
             email,
             password
+        }).catch(error => {
+            alert(error)
         })
-        
+
         try {
             await AsyncStorage.setItem('token', res.data.data.token)
             await AsyncStorage.setItem('userId', res.data.data.token + '')
@@ -35,8 +57,20 @@ export default class Login extends Component {
             alert(error)
         }
 
-        this.props.navigation.navigate('HomeScreen')
+        this.props.navigation.push('HomeScreen')
 
+    }
+
+    handleToggle = () => {
+        const { isPasswordHidden } = this.state;
+
+        if (isPasswordHidden) {
+          this.setState({ isPasswordHidden: false });
+          this.setState({ toggleText: 'hide' });
+        } else {
+          this.setState({ isPasswordHidden: true });
+          this.setState({ toggleText: 'show' });
+        }
     }
 
     render(){
@@ -48,13 +82,30 @@ export default class Login extends Component {
                             <Label>Email</Label>
                             <Input onChangeText={(email)=> this.setState({email})} value={this.state.email}/>
                         </Item>
-                        <Item stackedLabel last>
+                        <Item stackedLabel>
                             <Label>Password</Label>
-                            <Input onChangeText={(password)=> this.setState({password})}  value={this.state.password}/>
+                            <Input
+                                onChangeText={(password)=> this.setState({password})}
+                                value={this.state.password}
+                                secureTextEntry={this.state.isPasswordHidden}
+                            />
+                            <Icon onPress={this.handleToggle} name='checkmark-circle' />
+
                         </Item>
-                        <Button success full onPress={()=> this.handleLogin()}>
-                            <Text>Login</Text>
-                        </Button>
+
+
+
+                        {this.state.proses? (
+                            <Button success full>
+                                <Spinner/>
+                                <Text>Proses...</Text>
+                            </Button>
+                        )
+                        :(
+                            <Button success full onPress={()=> this.handleLogin()}>
+                                <Text>Login</Text>
+                            </Button>
+                        )}
                     </Form>
                 </Content>
             </Container>
