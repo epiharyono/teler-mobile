@@ -148,7 +148,6 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-bluetooth-escpos-printer')
     compile project(':react-native-vector-icons')
     compile project(':react-native-gesture-handler')
     implementation fileTree(dir: "libs", include: ["*.jar"])

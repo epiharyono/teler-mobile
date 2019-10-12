@@ -8,10 +8,14 @@ import {allOrder} from '../_redux/actions/order'
 
 export class TransaksiDetail extends Component {
 
-    state = {
-        title:'',
-        url: '',
-        token: '',
+    constructor(props){
+        super(props);
+
+        this.state = {
+          title:'', url: '', token: '',
+          tot_byr : 0,
+          data: []
+        }
     }
 
     static navigationOptions = {
@@ -32,13 +36,12 @@ export class TransaksiDetail extends Component {
         if(!token){
           this.props.navigation.navigate('HomeScreen')
         }
-
         this.props.dispatch(allOrder(url,token))
         this.setState({ url: url, token: token })
-
+        // alert(JSON.stringify(this.props.order.data.tot_byr))
     }
 
-    componentWillMount() {
+    componentDidMount() {
       this._refetch()
     }
 
@@ -53,16 +56,19 @@ export class TransaksiDetail extends Component {
         }).then((resp => {
             // alert(resp.data.info)
             // alert(JSON.stringify(resp))
+            // this.setState({ tot_byr: resp.data.data.tot_byr })
             this._refetch()
         }))
         .catch(error => {
             alert(error)
         })
-        console.log('vvvvv');
 
     }
 
     render() {
+      const {sub_byr,ppn,tot_byr} = this.props.order.data
+      let disabled = false
+      if(tot_byr < 1){  disabled = true}
       return (
           <Container>
               <Content>
@@ -73,11 +79,11 @@ export class TransaksiDetail extends Component {
                       <List>
                           <Card>
                             <CardItem header>
-                              <Text>Sub Total Rp. {this.props.order.data.bayar}</Text>
+                              <Text>Total Rp. {tot_byr}</Text>
                             </CardItem>
                             <CardItem>
                               <Body>
-                                  <Button iconLeft onPress={()=> this.props.navigation.navigate('TransaksiBayar', {url: this.state.url } )}  >
+                                  <Button disabled={disabled} iconLeft onPress={()=> this.props.navigation.navigate('TransaksiBayar', {url: this.state.url } )}  >
                                     <Icon name='cart' />
                                     <Text>Bayar</Text>
                                   </Button>
@@ -107,7 +113,7 @@ export class TransaksiDetail extends Component {
                                       <Text>+</Text>
                                     </Button>
                                   </Right>
-                                  <Right><Text> 12 </Text></Right>
+                                  <Right><Text> {c.jml_order} </Text></Right>
                                   <Right>
                                     <Button
                                         rounded
