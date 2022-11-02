@@ -11,7 +11,7 @@
     "axios": "^0.19.0",
     "native-base": "^2.13.8",
     "react": "16.6.3",
-    "react-native": "0.57.8",
+    "react-native": "0.70.4",
     "react-native-bluetooth-escpos-printer": "0.0.5",
     "react-native-elements": "^1.2.6",
     "react-native-gesture-handler": "^1.4.1",
